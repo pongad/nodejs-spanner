@@ -72,7 +72,7 @@
     "lodash.snakecase": "^4.1.1",
     "merge-stream": "^1.0.1",
     "methmeth": "^1.1.0",
-    "protobufjs": "^6.8.0",
+    "protobufjs": "^6.8.2",
     "safe-buffer": "^5.1.1",
     "split-array-stream": "^1.0.0",
     "stream-events": "^1.0.1",
