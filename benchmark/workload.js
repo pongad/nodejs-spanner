@@ -75,13 +75,12 @@ class Workload {
     for (let i = 0; i < operationCount; i++) {
       let randomWeight = Math.random() * this.totalWeight;
 
-      this.weights.forEach((weight, j) => {
-        const operation = this.operations[j];
-
-        if (randomWeight <= weight) {
-          this.queue.add(() => this.runOperation(operation));
+      for (let j = 0; j < this.weights.length; j++) {
+        if (randomWeight <= this.weights[j]) {
+          this.queue.add(() => this.runOperation(this.operations[j]));
+          break;
         }
-      });
+      }
     }
 
     return this.queue.onIdle().then(() => (this.duration = end()));
@@ -114,7 +113,18 @@ class Workload {
     const field = `field${random(9)}`;
     const value = crypto.randomBytes(100).toString('hex');
 
-    return table.update({ id, [field]: value });
+    return database.runTransaction((err, txn) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      txn.update(table, { id, [field]: value });
+      transaction.commit(err => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    })
   }
 }
 

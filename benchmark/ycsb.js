@@ -96,6 +96,7 @@ function printMetrics(workload) {
       ${opName}, LatencyVariance(us), ${stats.stdev(lats)}
       ${opName}, MinLatency(us), ${lats[0]}
       ${opName}, MaxLatency(us), ${lats[lats.length - 1]}
+      ${opName}, 50thPercentileLatency(us), ${stats.percentile(lats, 0.50)}
       ${opName}, 95thPercentileLatency(us), ${stats.percentile(lats, 0.95)}
       ${opName}, 99thPercentileLatency(us), ${stats.percentile(lats, 0.99)}
       ${opName}, 99.9thPercentileLatency(us), ${stats.percentile(lats, 0.999)}
