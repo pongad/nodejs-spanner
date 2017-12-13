@@ -92,7 +92,6 @@ class Workload {
     }
 
     const end = timeSpan();
-
     return this[operation]().then(() => this.latencies[operation].push(end()));
   }
 
@@ -108,23 +107,15 @@ class Workload {
   }
 
   update() {
-    const table = this.database.table(this.options.get('table'));
+    const table = this.options.get('table');
     const id = this.getRandomKey();
     const field = `field${random(9)}`;
     const value = crypto.randomBytes(100).toString('hex');
 
-    return database.runTransaction((err, txn) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      txn.update(table, { id, [field]: value });
-      transaction.commit(err => {
-        if (err) {
-          console.error(err);
-        }
-      });
-    })
+    return this.database.getTransaction().then(data => {
+      const txn = data[0];
+      return txn.update(table, { id, [field]: value }).then(() => txn.end());
+    });
   }
 }
 
