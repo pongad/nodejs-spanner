@@ -82,24 +82,24 @@ function printMetrics(workload) {
 
   console.log(
     dedent`[OVERALL], RunTime(ms), ${workload.duration}
-    [OVERALL], Throughput(ops/sec), ${totalOps / workload.duration}`
+    [OVERALL], Throughput(ops/sec), ${totalOps / workload.duration * 1000}`
   );
 
   workload.operations.forEach(operation => {
-    const lats = workload.latencies[operation].sort();
+    const lats = workload.latencies[operation];
     const ops = lats.length;
     const opName = `[${operation.toUpperCase()}]`;
 
     console.log(
-      dedent`${opName}, Operations ${operationCount}
-      ${opName}, AverageLatency(us), ${stats.mean(lats)}
-      ${opName}, LatencyVariance(us), ${stats.stdev(lats)}
-      ${opName}, MinLatency(us), ${lats[0]}
-      ${opName}, MaxLatency(us), ${lats[lats.length - 1]}
-      ${opName}, 50thPercentileLatency(us), ${stats.percentile(lats, 0.50)}
-      ${opName}, 95thPercentileLatency(us), ${stats.percentile(lats, 0.95)}
-      ${opName}, 99thPercentileLatency(us), ${stats.percentile(lats, 0.99)}
-      ${opName}, 99.9thPercentileLatency(us), ${stats.percentile(lats, 0.999)}
+      dedent`${opName}, Operations ${ops}
+      ${opName}, AverageLatency(ms), ${stats.mean(lats)}
+      ${opName}, LatencyVariance(ms), ${stats.stdev(lats)}
+      ${opName}, MinLatency(ms), ${lats.reduce((a, b) => Math.min(a, b))}
+      ${opName}, MaxLatency(ms), ${lats.reduce((a, b) => Math.max(a, b))}
+      ${opName}, 50thPercentileLatency(ms), ${stats.percentile(lats, 0.50)}
+      ${opName}, 95thPercentileLatency(ms), ${stats.percentile(lats, 0.95)}
+      ${opName}, 99thPercentileLatency(ms), ${stats.percentile(lats, 0.99)}
+      ${opName}, 99.9thPercentileLatency(ms), ${stats.percentile(lats, 0.999)}
       ${opName}, Return=OK ${ops}`
     );
 

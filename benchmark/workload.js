@@ -33,7 +33,7 @@ class Workload {
     this.database = database;
     this.options = options;
 
-    this.queue = new PQueue();
+    this.queue = new PQueue({concurrency: 1});
     this.weights = [];
     this.totalWeight = 0;
     this.operations = [];
