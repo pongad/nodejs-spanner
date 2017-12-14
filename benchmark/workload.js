@@ -114,7 +114,12 @@ class Workload {
 
     return this.database.getTransaction().then(data => {
       const txn = data[0];
-      return txn.update(table, { id, [field]: value }).then(() => txn.end());
+      txn.update(table, { id, [field]: value });
+      return txn.commit(err => {
+        if (err) {
+          console.error(err);
+        }
+      });
     });
   }
 }
